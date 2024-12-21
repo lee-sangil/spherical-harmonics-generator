@@ -1,16 +1,21 @@
 const fragment = /* glsl */ `
-uniform float coeffSH[16];
+uniform float coeffRed[16];
+uniform float coeffGreen[16];
+uniform float coeffBlue[16];
+uniform float coeffMono[16];
+uniform bool rgbMode;
 varying vec3 vPosition;
 
 #define PI (3.141592)
+#define L (3)
 
 float legendre(in int l, in int m, in float x) {
     if (l == 0) {
         return 1.0;
     } else if (l == 1) {
         if (m == 0) return sqrt(3.0) * x;
-        else if (m == 1) return -sqrt(1.5) * pow(1.-x*x, 0.5);
-        else if (m == -1) return sqrt(6.0) * 0.5 * pow(1.-x*x, 0.5);
+        else if (m == 1) return -sqrt(1.5) * pow(1.0 - x*x, 0.5);
+        else if (m == -1) return sqrt(6.0) * 0.5 * pow(1.0 - x*x, 0.5);
     } else if (l == 2) {
         if (m == 0) return sqrt(5.0) * 0.5 * (3.0 * x * x - 1.0);
         else if (m == 1) return -sqrt(5.0/6.0) * 3.0 * x * pow(1.0 - x*x, 0.5);
@@ -36,13 +41,29 @@ void main( void ) {
     float phi = atan(y, x) + PI; // 0 to 2PI
 
     // render
-    float color;
-    int k = 0;
-    for (int l = 0; l <= 3; ++l)
-        for (int m = -l; m <= l; ++m)
-            color += coeffSH[k++] * legendre(l,m,cos(theta)) * cos(float(m)*phi);
-
-	gl_FragColor = vec4(vec3(0.5 / sqrt(PI) * color), 1.);
+    if (rgbMode) {
+        vec3 color;
+        int k = 0;
+        for (int l = 0; l <= L; ++l) {
+            for (int m = -l; m <= l; ++m) {
+                float P = legendre(l,m,cos(theta));
+                float e = (m >= 0) ? cos(float(m)*phi) : sin(float(m)*phi);
+                color += vec3(coeffRed[k] * P * e, coeffGreen[k] * P * e, coeffBlue[k] * P * e);
+                ++k;
+            }
+        }
+        gl_FragColor = vec4(0.5 / sqrt(PI) * color, 1.);
+    } else {
+        float color;
+        int k = 0;
+        for (int l = 0; l <= L; ++l) {
+            for (int m = -l; m <= l; ++m) {
+                float e = (m >= 0) ? cos(float(m)*phi) : sin(float(m)*phi);
+                color += coeffMono[k++] * legendre(l,m,cos(theta)) * e;
+            }
+        }
+        gl_FragColor = vec4(vec3(0.5 / sqrt(PI) * color), 1.);
+    }
 }
 `
 export default fragment
