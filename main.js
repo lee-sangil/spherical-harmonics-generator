@@ -4,7 +4,7 @@ import fragment from './src/SH.frag.js';
 import vertex from './src/SH.vert.js';
 
 const canvas = document.createElement("canvas");
-canvas.style.backgroundColor = 'black';
+canvas.style.background = 'linear-gradient(#303438 0%, #000000 30%, #888480 100%)';
 document.body.style.margin = '0';
 document.body.appendChild(canvas);
 
@@ -49,18 +49,22 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 controls.enablePan = false;
 
-const setting = {
-    mode: "red",
-    k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0, k4m4: 0, k4m3: 0, k4m2: 0, k4m1: 0, k40: 0, k4p1: 0, k4p2: 0, k4p3: 0, k4p4: 0
-};
-
+let coeffZero = { k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0, k4m4: 0, k4m3: 0, k4m2: 0, k4m1: 0, k40: 0, k4p1: 0, k4p2: 0, k4p3: 0, k4p4: 0 };
 let coeffRed = { k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0, k4m4: 0, k4m3: 0, k4m2: 0, k4m1: 0, k40: 0, k4p1: 0, k4p2: 0, k4p3: 0, k4p4: 0 };
 let coeffGreen = { k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0, k4m4: 0, k4m3: 0, k4m2: 0, k4m1: 0, k40: 0, k4p1: 0, k4p2: 0, k4p3: 0, k4p4: 0 };
 let coeffBlue = { k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0, k4m4: 0, k4m3: 0, k4m2: 0, k4m1: 0, k40: 0, k4p1: 0, k4p2: 0, k4p3: 0, k4p4: 0 };
 let coeffMono = { k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0, k4m4: 0, k4m3: 0, k4m2: 0, k4m1: 0, k40: 0, k4p1: 0, k4p2: 0, k4p3: 0, k4p4: 0 };
 
+const setting = {
+    mode: "red",
+    reset: function(){ Object.assign(this, coeffZero); updateCoeffSH(); },
+    k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0, k4m4: 0, k4m3: 0, k4m2: 0, k4m1: 0, k40: 0, k4p1: 0, k4p2: 0, k4p3: 0, k4p4: 0
+};
+
 const gui = new dat.GUI();
 gui.add(setting, 'mode', {'Red': 'red', 'Green': 'green', 'Blue': 'blue', 'Mono': 'mono'}).name('Mode').listen().onChange(updateMode);
+
+gui.add(setting, 'reset').name('Reset');
 
 const l0 = gui.addFolder('l = 0');
 l0.add(setting, 'k00', -1, 1, 0.01).name("m = 0").listen().onChange(updateCoeffSH);
