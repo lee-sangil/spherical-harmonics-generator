@@ -14,14 +14,28 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0,0,3);
 
+window.addEventListener('resize', resize);
+function resize() {
+    const width = document.body.clientWidth;
+    const height = document.body.clientHeight;
+
+    canvas.width = width * window.devicePixelRatio;
+    canvas.height = height * window.devicePixelRatio;
+
+    renderer.setSize(width, height);
+
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+}
+
 const geometry = new THREE.SphereGeometry(1, 64, 64);
 const material = new THREE.ShaderMaterial({
 	uniforms: {
         rgbMode: { value: true },
-        coeffRed: { value: new Array(16).fill(0) },
-        coeffGreen: { value: new Array(16).fill(0) },
-        coeffBlue: { value: new Array(16).fill(0) },
-        coeffMono: { value: new Array(16).fill(0) },
+        coeffRed: { value: new Array(25).fill(0) },
+        coeffGreen: { value: new Array(25).fill(0) },
+        coeffBlue: { value: new Array(25).fill(0) },
+        coeffMono: { value: new Array(25).fill(0) },
 	},
     vertexShader: vertex,
 	fragmentShader: fragment,
@@ -37,13 +51,13 @@ controls.enablePan = false;
 
 const setting = {
     mode: "red",
-    k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0
+    k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0, k4m4: 0, k4m3: 0, k4m2: 0, k4m1: 0, k40: 0, k4p1: 0, k4p2: 0, k4p3: 0, k4p4: 0
 };
 
-let coeffRed = { k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0 };
-let coeffGreen = { k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0 };
-let coeffBlue = { k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0 };
-let coeffMono = { k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0 };
+let coeffRed = { k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0, k4m4: 0, k4m3: 0, k4m2: 0, k4m1: 0, k40: 0, k4p1: 0, k4p2: 0, k4p3: 0, k4p4: 0 };
+let coeffGreen = { k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0, k4m4: 0, k4m3: 0, k4m2: 0, k4m1: 0, k40: 0, k4p1: 0, k4p2: 0, k4p3: 0, k4p4: 0 };
+let coeffBlue = { k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0, k4m4: 0, k4m3: 0, k4m2: 0, k4m1: 0, k40: 0, k4p1: 0, k4p2: 0, k4p3: 0, k4p4: 0 };
+let coeffMono = { k00: 0, k1m1: 0, k10: 0, k1p1: 0, k2m2: 0, k2m1: 0, k20: 0, k2p1: 0, k2p2: 0, k3m3: 0, k3m2: 0, k3m1: 0, k30: 0, k3p1: 0, k3p2: 0, k3p3: 0, k4m4: 0, k4m3: 0, k4m2: 0, k4m1: 0, k40: 0, k4p1: 0, k4p2: 0, k4p3: 0, k4p4: 0 };
 
 const gui = new dat.GUI();
 gui.add(setting, 'mode', {'Red': 'red', 'Green': 'green', 'Blue': 'blue', 'Mono': 'mono'}).name('Mode').listen().onChange(updateMode);
@@ -71,6 +85,17 @@ l3.add(setting, 'k30', -1, 1, 0.01).name("m = 0").listen().onChange(updateCoeffS
 l3.add(setting, 'k3p1', -1, 1, 0.01).name("m = 1").listen().onChange(updateCoeffSH);
 l3.add(setting, 'k3p2', -1, 1, 0.01).name("m = 2").listen().onChange(updateCoeffSH);
 l3.add(setting, 'k3p3', -1, 1, 0.01).name("m = 3").listen().onChange(updateCoeffSH);
+
+const l4 = gui.addFolder('l = 4');
+l4.add(setting, 'k4m4', -1, 1, 0.01).name("m = -4").listen().onChange(updateCoeffSH);
+l4.add(setting, 'k4m3', -1, 1, 0.01).name("m = -3").listen().onChange(updateCoeffSH);
+l4.add(setting, 'k4m2', -1, 1, 0.01).name("m = -2").listen().onChange(updateCoeffSH);
+l4.add(setting, 'k4m1', -1, 1, 0.01).name("m = -1").listen().onChange(updateCoeffSH);
+l4.add(setting, 'k40', -1, 1, 0.01).name("m = 0").listen().onChange(updateCoeffSH);
+l4.add(setting, 'k4p1', -1, 1, 0.01).name("m = 1").listen().onChange(updateCoeffSH);
+l4.add(setting, 'k4p2', -1, 1, 0.01).name("m = 2").listen().onChange(updateCoeffSH);
+l4.add(setting, 'k4p3', -1, 1, 0.01).name("m = 3").listen().onChange(updateCoeffSH);
+l4.add(setting, 'k4p4', -1, 1, 0.01).name("m = 4").listen().onChange(updateCoeffSH);
 
 function mergeExistingFields(target, source) {
     for (const key in source) {
@@ -115,7 +140,16 @@ function updateCoeffSH () {
         setting.k30,
         setting.k3p1,
         setting.k3p2,
-        setting.k3p3
+        setting.k3p3,
+        setting.k4m4,
+        setting.k4m3,
+        setting.k4m2,
+        setting.k4m1,
+        setting.k40,
+        setting.k4p1,
+        setting.k4p2,
+        setting.k4p3,
+        setting.k4p4
     ];
 
     if (setting.mode == 'red') {
