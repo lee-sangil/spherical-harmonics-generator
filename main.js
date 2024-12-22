@@ -1,7 +1,11 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import legendre from './src/legendre.js';
 import fragment from './src/SH.frag.js';
 import vertex from './src/SH.vert.js';
+
+let fragment_shader = legendre + fragment;
+let vertex_shader = legendre + vertex;
 
 const canvas = document.createElement("canvas");
 canvas.style.background = 'linear-gradient(#303438 0%, #000000 30%, #888480 100%)';
@@ -31,14 +35,13 @@ function resize() {
 const geometry = new THREE.SphereGeometry(1, 64, 64);
 const material = new THREE.ShaderMaterial({
 	uniforms: {
-        rgbMode: { value: true },
         coeffRed: { value: new Array(25).fill(0) },
         coeffGreen: { value: new Array(25).fill(0) },
         coeffBlue: { value: new Array(25).fill(0) },
         coeffMono: { value: new Array(25).fill(0) },
 	},
-    vertexShader: vertex,
-	fragmentShader: fragment,
+    vertexShader: vertex_shader,
+	fragmentShader: fragment_shader,
 })
 const sphere = new THREE.Mesh(geometry, material);
 
@@ -112,11 +115,6 @@ function mergeExistingFields(target, source) {
   }
   
 function updateMode () {
-    if (setting.mode == 'mono')
-        material.uniforms.rgbMode.value = false;
-    else
-        material.uniforms.rgbMode.value = true;
-
     if (setting.mode == 'red') {
         Object.assign(setting, coeffRed);
     } else if (setting.mode == 'green') {
