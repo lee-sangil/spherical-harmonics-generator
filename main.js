@@ -66,7 +66,7 @@ const setting = {
 
 const gui = new dat.GUI();
 gui.domElement.style.marginRight = '0px';
-gui.add(setting, 'mode', {'Red': 'red', 'Green': 'green', 'Blue': 'blue', 'Mono': 'mono'}).name('Mode').listen().onChange(updateMode);
+gui.add(setting, 'mode', {'Red': 'red', 'Green': 'green', 'Blue': 'blue', 'Height': 'mono'}).name('Mode').listen().onChange(updateMode);
 
 gui.add(setting, 'reset').name('Reset');
 

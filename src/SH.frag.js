@@ -2,7 +2,6 @@ const fragment = /* glsl */ `
 uniform float coeffRed[25];
 uniform float coeffGreen[25];
 uniform float coeffBlue[25];
-uniform float coeffMono[25];
 varying vec3 vPosition;
 
 #define PI (3.141592)
